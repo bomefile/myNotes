@@ -59,6 +59,10 @@
 * @SpringBootConfiguration
     * @Configuration 代表定义了一个bean
 * @EnableAutoConfiguration
+    * @AutoConfigurationPackage
+    * @Import(AutoConfigurationImportSelector.class)
+    借助Import,将所有符合自动配置条件的bean定义加载到IoC容器中。
+    AutoConfigurationImportSelector通过SpringFactoriesLoader
 * @ComponentScan
 
 > 表示一个配置（configuration）class，声明
@@ -66,4 +70,13 @@
 
 
 ## @configuration
+代表一个bean配置文件
+
+## 启动流程
+
+1. 初始化SpringApplication
+   - 根据classpath判断服务的启动类型（org.springframework.web.servlet.DispatcherServlet）
+   - ApplicationContextInitializer 创建实例
+   - ApplicationListener 创建实例
+   - 推断main方法的定义类
 
