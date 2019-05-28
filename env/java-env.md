@@ -7,3 +7,9 @@
 # PATH
 >- %JAVA_HOME%\bin
 >- %JAVA_HOME%\jre\bin
+
+# git
+
+cn.wangliangliang@gmail.com
+
+ssh-keygen -t rsa -C "cn.wangliangliang@gmail.com"
