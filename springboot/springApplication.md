@@ -1,5 +1,4 @@
 
-# 笔记
 
 ## spring 回顾
 
@@ -63,15 +62,31 @@
     * @Import(AutoConfigurationImportSelector.class)
     借助Import,将所有符合自动配置条件的bean定义加载到IoC容器中。
     AutoConfigurationImportSelector通过SpringFactoriesLoader
-* @ComponentScan
+* @ComponentScan(
+      excludeFilters = {@Filter(
+      type = FilterType.CUSTOM,
+      classes = {TypeExcludeFilter.class}
+  ), @Filter(
+      type = FilterType.CUSTOM,
+      classes = {AutoConfigurationExcludeFilter.class}
+  )}
+  )
+    * TypeExcludeFilter.class
+     > springboot1.4引入，用于在beanFactory已注册的TypeExcludeFilter Bean
+    * AutoConfigurationExcludeFilter
+    > 1.5开始支持，用于排除其他同时标注@Configuration和@EnableAutoConfiguration的类
 
-> 表示一个配置（configuration）class，声明
+### @SpringBootConfiguration
 
 
+* @Component
+    * Configuration
+        * SpringBootConfiguration
+> 多层次@Component派生，官方称Spring模式注解（Stereotype Annotation）
 
-## @configuration
-代表一个bean配置文件
-
+* @AliasFor
+> 用于桥接其他注解属性，能够将一个或多个注解的属性"别名"在某个注解中。
+### 
 ## 启动流程
 
 1. 初始化SpringApplication
