@@ -12,3 +12,5 @@
  - test：测试需要，不会打入包中。
  
  - system：非本地仓库引入、存在系统的某个路径下的 jar。（一般不使用）
+ 
+ mvn package -Dmaven.test.skip=true

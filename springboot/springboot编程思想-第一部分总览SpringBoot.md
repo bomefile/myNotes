@@ -109,20 +109,13 @@ run your Maven build.
 
 * jar 运行
 
-依赖引入
+依赖引入,springboot打包成fatjar
 ````
 <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build-info</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -143,9 +136,296 @@ java -jar target/first-app-by-gui-0.0.1-SNAPSHOT.jar
 mvn spring-boot:run
 ````
 
+Q:build-info是什么？
+A:服务器监控信息。
 
-# 启动运行
+target 包目录结构
+````
+wangliangliangdeMacBook-Pro:target wangliangliang$ tree -h
+.
+├── [ 160]  classes
+│   ├── [  96]  META-INF
+│   │   └── [ 188]  build-info.properties
+│   ├── [ 299]  application.properties
+│   └── [  96]  com
+│       └── [  96]  test
+│           └── [  96]  demofirstboot
+│               └── [1.0K]  DemoFirstBootApplication.class
+├── [ 17M]  demo-first-boot-0.0.1-SNAPSHOT.jar
+├── [3.3K]  demo-first-boot-0.0.1-SNAPSHOT.jar.original
+├── [  96]  generated-sources
+│   └── [  64]  annotations
+├── [  96]  generated-test-sources
+│   └── [  64]  test-annotations
+├── [  96]  maven-archiver
+│   └── [  67]  pom.properties
+├── [  96]  maven-status
+│   └── [ 128]  maven-compiler-plugin
+│       ├── [  96]  compile
+│       │   └── [ 128]  default-compile
+│       │       ├── [  54]  createdFiles.lst
+│       │       └── [ 124]  inputFiles.lst
+│       └── [  96]  testCompile
+│           └── [ 128]  default-testCompile
+│               ├── [   0]  createdFiles.lst
+│               └── [ 129]  inputFiles.lst
+├── [ 128]  surefire-reports
+│   ├── [ 20K]  TEST-com.test.demofirstboot.DemoFirstBootApplicationTests.xml
+│   └── [ 353]  com.test.demofirstboot.DemoFirstBootApplicationTests.txt
+└── [  96]  test-classes
+    └── [  96]  com
+        └── [  96]  test
+            └── [  96]  demofirstboot
+                └── [ 661]  DemoFirstBootApplicationTests.class
 
+21 directories, 13 files
+
+````
+├── [ 17M]  demo-first-boot-0.0.1-SNAPSHOT.jar 加工后的文件
+├── [3.3K]  demo-first-boot-0.0.1-SNAPSHOT.jar.original 原始maven包结构，未包含第三方依赖资源
+
+demo-first-boot-0.0.1-SNAPSHOT 目录结构
+````
+wangliangliangdeMacBook-Pro:demo-first-boot-0.0.1-SNAPSHOT wangliangliang$ tree
+.
+├── BOOT-INF
+│   ├── classes
+│   │   ├── application.properties
+│   │   └── com
+│   │       └── test
+│   │           └── demofirstboot
+│   │               └── DemoFirstBootApplication.class
+│   └── lib
+│       ├── HdrHistogram-2.1.9.jar
+│       ├── LatencyUtils-2.0.3.jar
+│       ├── classmate-1.4.0.jar
+│       ├── hibernate-validator-6.0.16.Final.jar
+│       ├── jackson-annotations-2.9.0.jar
+│       ├── jackson-core-2.9.8.jar
+│       ├── jackson-databind-2.9.8.jar
+│       ├── jackson-datatype-jdk8-2.9.8.jar
+│       ├── jackson-datatype-jsr310-2.9.8.jar
+│       ├── jackson-module-parameter-names-2.9.8.jar
+│       ├── javax.annotation-api-1.3.2.jar
+│       ├── jboss-logging-3.3.2.Final.jar
+│       ├── jul-to-slf4j-1.7.26.jar
+│       ├── log4j-api-2.11.2.jar
+│       ├── log4j-to-slf4j-2.11.2.jar
+│       ├── logback-classic-1.2.3.jar
+│       ├── logback-core-1.2.3.jar
+│       ├── micrometer-core-1.1.4.jar
+│       ├── slf4j-api-1.7.26.jar
+│       ├── snakeyaml-1.23.jar
+│       ├── spring-aop-5.1.7.RELEASE.jar
+│       ├── spring-beans-5.1.7.RELEASE.jar
+│       ├── spring-boot-2.1.5.RELEASE.jar
+│       ├── spring-boot-actuator-2.1.5.RELEASE.jar
+│       ├── spring-boot-actuator-autoconfigure-2.1.5.RELEASE.jar
+│       ├── spring-boot-autoconfigure-2.1.5.RELEASE.jar
+│       ├── spring-boot-starter-2.1.5.RELEASE.jar
+│       ├── spring-boot-starter-actuator-2.1.5.RELEASE.jar
+│       ├── spring-boot-starter-json-2.1.5.RELEASE.jar
+│       ├── spring-boot-starter-logging-2.1.5.RELEASE.jar
+│       ├── spring-boot-starter-tomcat-2.1.5.RELEASE.jar
+│       ├── spring-boot-starter-web-2.1.5.RELEASE.jar
+│       ├── spring-context-5.1.7.RELEASE.jar
+│       ├── spring-core-5.1.7.RELEASE.jar
+│       ├── spring-expression-5.1.7.RELEASE.jar
+│       ├── spring-jcl-5.1.7.RELEASE.jar
+│       ├── spring-web-5.1.7.RELEASE.jar
+│       ├── spring-webmvc-5.1.7.RELEASE.jar
+│       ├── tomcat-embed-core-9.0.19.jar
+│       ├── tomcat-embed-el-9.0.19.jar
+│       ├── tomcat-embed-websocket-9.0.19.jar
+│       └── validation-api-2.0.1.Final.jar
+├── META-INF
+│   ├── MANIFEST.MF
+│   ├── build-info.properties
+│   └── maven
+│       └── com.test
+│           └── demo-first-boot
+│               ├── pom.properties
+│               └── pom.xml
+└── org
+    └── springframework
+        └── boot
+            └── loader
+                ├── ExecutableArchiveLauncher.class
+                ├── JarLauncher.class
+                ├── LaunchedURLClassLoader$UseFastConnectionExceptionsEnumeration.class
+                ├── LaunchedURLClassLoader.class
+                ├── Launcher.class
+                ├── MainMethodRunner.class
+                ├── PropertiesLauncher$1.class
+                ├── PropertiesLauncher$ArchiveEntryFilter.class
+                ├── PropertiesLauncher$PrefixMatchingArchiveFilter.class
+                ├── PropertiesLauncher.class
+                ├── WarLauncher.class
+                ├── archive
+                │   ├── Archive$Entry.class
+                │   ├── Archive$EntryFilter.class
+                │   ├── Archive.class
+                │   ├── ExplodedArchive$1.class
+                │   ├── ExplodedArchive$FileEntry.class
+                │   ├── ExplodedArchive$FileEntryIterator$EntryComparator.class
+                │   ├── ExplodedArchive$FileEntryIterator.class
+                │   ├── ExplodedArchive.class
+                │   ├── JarFileArchive$EntryIterator.class
+                │   ├── JarFileArchive$JarFileEntry.class
+                │   └── JarFileArchive.class
+                ├── data
+                │   ├── RandomAccessData.class
+                │   ├── RandomAccessDataFile$1.class
+                │   ├── RandomAccessDataFile$DataInputStream.class
+                │   ├── RandomAccessDataFile$FileAccess.class
+                │   └── RandomAccessDataFile.class
+                ├── jar
+                │   ├── AsciiBytes.class
+                │   ├── Bytes.class
+                │   ├── CentralDirectoryEndRecord.class
+                │   ├── CentralDirectoryFileHeader.class
+                │   ├── CentralDirectoryParser.class
+                │   ├── CentralDirectoryVisitor.class
+                │   ├── FileHeader.class
+                │   ├── Handler.class
+                │   ├── JarEntry.class
+                │   ├── JarEntryFilter.class
+                │   ├── JarFile$1.class
+                │   ├── JarFile$2.class
+                │   ├── JarFile$JarFileType.class
+                │   ├── JarFile.class
+                │   ├── JarFileEntries$1.class
+                │   ├── JarFileEntries$EntryIterator.class
+                │   ├── JarFileEntries.class
+                │   ├── JarURLConnection$1.class
+                │   ├── JarURLConnection$JarEntryName.class
+                │   ├── JarURLConnection.class
+                │   ├── StringSequence.class
+                │   └── ZipInflaterInputStream.class
+                └── util
+                    └── SystemPropertyUtils.class
+
+18 directories, 98 files
+````
+
+* BOOT-INF/classes 存放编译后的classes文件
+* BOOT-INF/lib 依赖的jar包
+* META-INF 存放目录相应的元信息，MANIFEST.MF
+* org SpringBoot相关的classes文件
+
+````
+
+wangliangliangdeMacBook-Pro:target wangliangliang$ tree original/
+original/
+├── META-INF
+│   ├── MANIFEST.MF
+│   ├── build-info.properties
+│   └── maven
+│       └── com.test
+│           └── demo-first-boot
+│               ├── pom.properties
+│               └── pom.xml
+├── application.properties
+└── com
+    └── test
+        └── demofirstboot
+            └── DemoFirstBootApplication.class
+
+7 directories, 6 files
+````
+
+
+
+记得WEB-INF/classes 和 WEB-INF/lib下吗？
+
+
+## jar 启动的秘密
+````
 META-INF的MANIFEST.MF
-- Main-Class：org.springframework.boot.loader.JarLauncher
-- Start—Class：
+
+Manifest-Version: 1.0
+Implementation-Title: demo-first-boot
+Implementation-Version: 0.0.1-SNAPSHOT
+Start-Class: com.test.demofirstboot.DemoFirstBootApplication
+Spring-Boot-Classes: BOOT-INF/classes/
+Spring-Boot-Lib: BOOT-INF/lib/
+Build-Jdk-Spec: 1.8
+Spring-Boot-Version: 2.1.5.RELEASE
+Created-By: Maven Archiver 3.4.0
+Main-Class: org.springframework.boot.loader.JarLauncher
+````
+
+---
+理解固化的Maven依赖
+---
+
+## spring-boot-starter-parent 与 spring-boot-dependencies
+
+spring-boot-starter-parent 存在一定的限制，很可能应用的pom 拥有自定义的Parent。
+
+采用spring-boot-dependencies做依赖配置。
+````
+<!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>${spring.boot.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>-->
+````
+
+查看spring-boot-starter-parent的依赖关系，发现spring-boot-dependencies是其父类。
+
+* spring-boot-starter-parent 
+> 包含maven插件配置.可不添加repackage配置，仍可独立运行。
+
+* spring-boot-dependencies
+> 包含spring-boot依赖包的统一配置
+  > SpringBoot maven配置
+  > 打包成一个可执行的jar或war
+````
+ <plugin>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-maven-plugin</artifactId>
+     <configuration>
+         <executable>true</executable>
+     </configuration>
+
+     <executions>
+         <execution>
+             <goals>
+                 <goal>repackage</goal>
+             </goals>
+         </execution>
+     </executions>
+ </plugin>
+ 
+````
+注意必须添加repackage否则打包的jar无法使用java -jar 运行
+
+[更多介绍](https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/maven-plugin/)
+
+---
+理解嵌入式Web容器
+---
+
+Servlet规范 | Tomcat | Jetty | Undertow
+---------| -------------
+4.0 | 9.x | 9.x | 2.x
+3.1 | 8.x | 8.x | 1.x
+3.0 | 7.x | 7.x | N/A
+2.5 | 6.x | 6.x | N/A
+
+嵌入式容器启动接口
+
+
+从servlet3.0开始，Servlet组件通过ServletAPI在装配式运行。
+
+ServletContainerInitializer 启动回调
+WebApplicationInitializer springframework的抽象
+
+在Spring Web自动装配中将详细说明。
+
+---
+理解自动装配
+---
