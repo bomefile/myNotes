@@ -429,3 +429,7 @@ WebApplicationInitializer springframework的抽象
 ---
 理解自动装配
 ---
+
+> Spring Boot auto-configuration attempts to automatically configure your Spring application based on the jar dependencies that you have added.
+> For example, if HSQLDB is on your classpath, and you have not manually configured any database connection beans, then Spring Boot auto-configures an in-memory database.
+
