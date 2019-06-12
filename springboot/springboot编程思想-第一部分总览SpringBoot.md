@@ -416,7 +416,7 @@ Servlet规范 | Tomcat | Jetty | Undertow
 3.0 | 7.x | 7.x | N/A
 2.5 | 6.x | 6.x | N/A
 
-嵌入式容器启动接口
+嵌入式容器如何启动？
 
 
 从servlet3.0开始，Servlet组件通过ServletAPI在装配式运行。
@@ -426,10 +426,163 @@ WebApplicationInitializer springframework的抽象
 
 在Spring Web自动装配中将详细说明。
 
+## 变更spring默认的Servlet容器配置
+
+````
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring-boot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+			<version>2.1.3.RELEASE</version>
+		</dependency>
+
+````
 ---
 理解自动装配
 ---
 
+Q:什么是自动装配？
+
 > Spring Boot auto-configuration attempts to automatically configure your Spring application based on the jar dependencies that you have added.
 > For example, if HSQLDB is on your classpath, and you have not manually configured any database connection beans, then Spring Boot auto-configures an in-memory database.
+
+查看官方文档的说明 16.Auto-Configuration
+
+
+* @SpringBootConfiguration
+
+* @EnableAutoConfiguration
+
+* @Configuration
+
+
+下面是SpringFramework常见的装配
+````
+<context:component-scan>
+
+@ComponentScan
+
+@Import
+
+```` 
+1. bean 收集注册
+
+手动注册配置
+````
+    <bean id="mockService" class="...MockServiceImpl"/>
+````
+自动扫描配置
+````    
+    <context:commpent-scan base-package = "com.demo"/>
+````
+
+````
+    @Configuration
+    public void MockConfig{
+        // bean 定义
+        
+        @Bean
+        public MockService mockService(){
+            new MockServiceImpl(dependencyService());// 注入
+        }
+        
+        @Bean
+        public DependencyService dependencyService(){
+            new DependencyServiceImpl();
+        }
+    }
+````
+
+* @Properties @Property
+
+> 从指定地方加载配置文件，并将其中的属性加载到IoC容器中，便于填充一些bean定义属性的占位符（placeholder），需要PropertiesSourcesPlaceholderConfigurer的配合
+````
+    @Configturation
+    @PropertySource("classpath:1.properties")
+    @PropertySource("classpath:2.properties")
+    public class XConfiguration{
+        
+    }
+````
+
+* @Import @ImportResource
+
+````
+    <import "xxx.xml"/>
+    
+    @Configuration
+    @Import(MockConfiguration)
+    public class XConfig(){
+        
+    }
+````
+借助@Import() 将符合条件的@Configuration装载到springBoot的配置中
+````
+@AutoConfigurationPackage
+@Import(AutoConfigurationImportSelector.class)
+
+````
+
+## @SpringBootApplication
+
+* @SpringBootConfiguration
+    * @Configuration 代表定义了一个bean
+* @EnableAutoConfiguration
+    * @AutoConfigurationPackage
+    * @Import(AutoConfigurationImportSelector.class)
+    借助Import,将所有符合自动配置条件的bean定义加载到IoC容器中。
+    AutoConfigurationImportSelector通过SpringFactoriesLoader
+* @ComponentScan(
+      excludeFilters = {@Filter(
+      type = FilterType.CUSTOM,
+      classes = {TypeExcludeFilter.class}
+  ), @Filter(
+      type = FilterType.CUSTOM,
+      classes = {AutoConfigurationExcludeFilter.class}
+  )}
+  )
+    * TypeExcludeFilter.class
+     > springboot1.4引入，用于在beanFactory已注册的TypeExcludeFilter Bean
+    * AutoConfigurationExcludeFilter
+    > 1.5开始支持，用于排除其他同时标注@Configuration和@EnableAutoConfiguration的类
+
+
+### @SpringBootConfiguration
+
+
+* @Component
+    * Configuration
+        * SpringBootConfiguration
+> 多层次@Component派生，官方称Spring模式注解（Stereotype Annotation），类似这样的有很多比如@Repository、@Service、@Controller
+````
+<context:component-scan base-package="com.paipai.inspect">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+````
+* @AliasFor
+> 用于桥接其他注解属性，能够将一个或多个注解的属性"别名"在某个注解中。这里存在Spring注解属性别名和覆盖，将在后续章节说明。
+
+总结：@SpringbootApplication是一个聚合注解，包含@ComponentScan、@Configuration和@EnableAutoConfiguration的核心特性。
+
+## @EnableAutoConfiguration 激活自动装配
+
+源码查看@EnableAutoConfiguration的派生体系
+演示实例：demo-first-boot
+
+总结：SpringApplication#run方法引导Spring Boot应用时，并不强依赖于@Configuration类。
+@EnableAutoConfiguration于@SpringBootApplication在激活自动装配方面没有差别的，然而对于被标注类的Bean类型存在差异。
+
+
 

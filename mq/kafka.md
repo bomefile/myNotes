@@ -54,3 +54,45 @@ kafka 通过 zookeeper 来存储集群的 meta 信息。
 https://cloud.tencent.com/developer/article/1032487
 
 https://www.cnblogs.com/davidwang456/articles/7884677.html
+
+## KafkaTemplate 配置 消息生产者配置
+
+````
+    @Bean(name = "timelineKafkaTemplate")
+    public KafkaTemplate<String, String> timelineKafkaTemplate() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "com.sayabc.onlineclassroom.timeline.configuration.TimelinePartitioner");
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(configProps));
+    }
+````
+
+##  kafka消费者配置
+
+````
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<?, ?> kafkaListenerContainerFactory(
+            ConcurrentKafkaListenerContainerFactoryConfigurer configurer,
+            ConsumerFactory<Object, Object> kafkaConsumerFactory,
+            KafkaTemplate<Object, Object> template) {
+
+        ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        configurer.configure(factory, kafkaConsumerFactory);
+        factory.setBatchListener(true);
+        factory.setMessageConverter(batchConverter());
+        return factory;
+    }
+
+    @Bean
+    public BatchMessagingMessageConverter batchConverter() {
+        return new BatchMessagingMessageConverter(converter());
+    }
+
+    @Bean
+    public RecordMessageConverter converter() {
+        return new StringJsonMessageConverter();
+    }
+
+````
