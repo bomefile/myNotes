@@ -35,7 +35,8 @@ with minimal upfront configuration of Spring.
     * Reactive Web
 - 非web应用
 服务提供、消息处理、调度任务
-容器：
+
+Spring Framework 外部依赖于容器配置启动。
 SpringBoot使用嵌入式容器启动，把容器作为应用的一部分。本质上它属于Spring应用上下文中的组件Beans，跟随Spring应用上下午启动并注册初始化。
 
 # 创建SpringBoot
