@@ -584,5 +584,34 @@ Q:什么是自动装配？
 总结：SpringApplication#run方法引导Spring Boot应用时，并不强依赖于@Configuration类。
 @EnableAutoConfiguration于@SpringBootApplication在激活自动装配方面没有差别的，然而对于被标注类的Bean类型存在差异。
 
+## 理解自动装配
 
+官方文档49章节
 
+通常与@Conditional注解关联使用
+
+* @ConditionOnClass 当类存在于classpath下时
+* @ConditionOnMissBean 当bean存在于当前beanFactory时
+
+示例说明
+````
+@Configuration
+@ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class }) ①
+@EnableConfigurationProperties(DataSourceProperties.class)
+@Import({ DataSourcePoolMetadataProvidersConfiguration.class,
+		DataSourceInitializationConfiguration.class })
+public class DataSourceAutoConfiguration ②{
+
+	@Configuration
+	@Conditional(EmbeddedDatabaseCondition.class)
+	@ConditionalOnMissingBean({ DataSource.class, XADataSource.class })
+	@Import(EmbeddedDataSourceConfiguration.class) ④
+	protected static class EmbeddedDatabaseConfiguration ③{
+
+	}
+}
+````
+
+org.hsqldb.jdbcDriver存在为起始点。
+
+装配问题官方说明描述：49.1 Understanding Auto-configured Beans
