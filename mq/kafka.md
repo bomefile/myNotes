@@ -1,17 +1,44 @@
 # zookeeper 启动配置
-运行zserver.cmd
+运行zkServer.cmd
 # kafka 启动配置
  .\bin\windows\kafka-server-start.bat .\config\server.properties
 
 kafka启动配置 
 zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties & kafka-server-start /usr/local/etc/kafka/server.properties
-  
+
+nohup ./bin/kafka-server-start.sh ./config/server.properties & ./bin/zookeeper-server-start.sh ./config/zookeeper.properties &
+
 依赖工程：spring-kafka的samples
 
-[配置参考地址](https://www.cnblogs.com/lnice/p/9668750.html)
+[win配置参考地址](https://www.cnblogs.com/lnice/p/9668750.html)
 
+## 管理kafka
+1. 创建topic
+````
+kafka-topics --zookeeper localhost:2181 --create --topic "demo-topic-1" \
+> --replication-factor 1 --partitions 1
+Created topic demo-topic-1.
+````
 
+2. 查看topic列表
 
+````
+./kafka-topics.sh  --zookeeper localhost:2181 --list
+````
+
+3. 删除topics
+
+````
+kafka-topics --zookeeper localhost:2181 
+--delete --topic demo-topic-1
+````
+4. 列出消费者群组
+
+````
+kafka-consumer-groups --zookeeper localhost:2181 
+
+````
+> 注意：上述安装环境为本机
 ## kafka简介
 
 ### 发布订阅

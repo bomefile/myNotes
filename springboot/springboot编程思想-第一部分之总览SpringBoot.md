@@ -487,7 +487,7 @@ Q:什么是自动装配？
 ````    
     <context:commpent-scan base-package = "com.demo"/>
 ````
-
+springboot配置
 ````
     @Configuration
     public void MockConfig{
@@ -585,14 +585,23 @@ Q:什么是自动装配？
 总结：SpringApplication#run方法引导Spring Boot应用时，并不强依赖于@Configuration类。
 @EnableAutoConfiguration于@SpringBootApplication在激活自动装配方面没有差别的，然而对于被标注类的Bean类型存在差异。
 
-## 理解自动装配
+## @SpringBootConfiguration "继承" @Configuration CGLIB提升特性
 
-官方文档49章节
+@Bean 在 @Component 和 @Configuration 差别
+参考文档Spring-code文档 1.10.5
+
+Full @Configuration vs “lite” @Bean mode?
+
+在@Configuration中的bean为Full，会执行CGLIB提升
+
+## 理解自动装配机制
+
+SpringBoot官方文档49章节介绍基本的说明
 
 通常与@Conditional注解关联使用
 
 * @ConditionOnClass 当类存在于classpath下时
-* @ConditionOnMissBean 当bean存在于当前beanFactory时
+* @ConditionOnMissBean 当bean不存在于当前beanFactory时
 
 示例说明
 ````
@@ -604,10 +613,10 @@ Q:什么是自动装配？
 public class DataSourceAutoConfiguration ②{
 
 	@Configuration
-	@Conditional(EmbeddedDatabaseCondition.class)
+	@Conditional(EmbeddedDatabaseCondition.class) ③
 	@ConditionalOnMissingBean({ DataSource.class, XADataSource.class })
-	@Import(EmbeddedDataSourceConfiguration.class) ④
-	protected static class EmbeddedDatabaseConfiguration ③{
+	@Import(EmbeddedDataSourceConfiguration.class) ⑤
+	protected static class EmbeddedDatabaseConfiguration ④{
 
 	}
 }
@@ -616,3 +625,44 @@ public class DataSourceAutoConfiguration ②{
 org.hsqldb.jdbcDriver存在为起始点。
 
 装配问题官方说明描述：49.1 Understanding Auto-configured Beans
+
+> 那么如果我想自己定义一个自动装配如何做呢？
+> 官方文档已说明：49.2 Locating Auto-configuration Candidates
+
+demo演示
+
+> demo-autoconfig
+
+---
+理解Production-Ready特性
+---
+
+为预生产做准备
+
+Spring Boot Actuator 
+
+## 理解"外部化的配置"
+
+外部配置变量引入方式：
+* Bean的@Value
+* Spring Environment读取
+* @ConfigurationProperties 绑定到结构化对象
+
+参考如下文档
+> 24. Externalized Configuration
+
+## 理解"规约大于配置"
+
+> Absolutely no code generation and no requirement for XML configuration.
+
+
+---
+结束语
+---
+总结：Spring Boot五大特写
+
+* SpringBootApplication
+* 自动装配
+* 外部化配置
+* Spring Boot Actuator
+* 嵌入式Web容器
