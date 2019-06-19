@@ -14,3 +14,24 @@
  - system：非本地仓库引入、存在系统的某个路径下的 jar。（一般不使用）
  
  mvn package -Dmaven.test.skip=true
+ 
+ 
+ mvn archetype:generate DarchetypeGroupId=org.apache.maven.archetypes -DgroupId=com.mycompany.app -DartifactId=myapp
+ 
+ mvn  [插件名]：[goal] [DarchetypeGroupId] 使用模版类型
+ -DgroupId 相当于这个project的所有者或者机构的一个标识，一般是com.company.xxx这种格式
+ -DartifactId 这个project最后所生成的文档(jar、war)的名字
+  packaging： 这个project的打包的类型，一般是war、jar等值
+  version： project的版本
+  name： project的名字，生成文档等内容的时候会用的这个名字
+ 
+ 
+ mvn compile 编译
+ mvn package 打包
+ /***********************************************************************************************************************************************/
+ mvn site ： 为你的project创建一个站点
+ mvn clean： 清除target目录下的所有文件
+ mvn eclipse:eclipse ：为project生成eclipse的工程文件和classpath文件
+ 
+ 
+ 
