@@ -25,3 +25,7 @@ mongo
 查看homebrew安装的服务情况：
 
 brew services list
+
+
+MongoDB监测
+
