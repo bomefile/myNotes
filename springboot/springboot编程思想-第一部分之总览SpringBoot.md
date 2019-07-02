@@ -659,10 +659,20 @@ Spring Boot Actuator
 ---
 结束语
 ---
-总结：Spring Boot五大特写
+总结：Spring Boot五大特性
 
 * SpringBootApplication
 * 自动装配
 * 外部化配置
 * Spring Boot Actuator
 * 嵌入式Web容器
+
+SpringBoot作为SpringCloud基础设施，提供了快速构建分布式系统的能力。
+
+- 分布式配置
+- 服务注册和发现
+- 路由
+- 服务调用
+- 负载均衡
+- 熔断机制
+- 分布式消息
