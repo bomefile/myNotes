@@ -68,7 +68,8 @@ replica 中的一个角色，从 leader 中复制数据。
 kafka 集群中的其中一个服务器，用来进行 leader election 以及 各种 failover。
 12. zookeeper：
 kafka 通过 zookeeper 来存储集群的 meta 信息。
-
+13. replication-factor
+每个partition的副本个数
 
 ### KAFKA高性能
 - 其一，Kafka 集群可以通过增删 Broker 实集群级的水平扩展。
