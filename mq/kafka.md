@@ -69,7 +69,7 @@ kafka 集群中的其中一个服务器，用来进行 leader election 以及 �
 12. zookeeper：
 kafka 通过 zookeeper 来存储集群的 meta 信息。
 13. replication-factor
-每个partition的副本个数
+每个partition的副本个数。任意将每一个分区复制到n个broker上。
 
 ### KAFKA高性能
 - 其一，Kafka 集群可以通过增删 Broker 实集群级的水平扩展。
