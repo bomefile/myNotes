@@ -92,7 +92,7 @@ https://www.cnblogs.com/davidwang456/articles/7884677.html
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "com.sayabc.onlineclassroom.timeline.configuration.TimelinePartitioner");
+        configProps.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "com.***.onlineclassroom.timeline.configuration.TimelinePartitioner");
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(configProps));
     }
 ````
